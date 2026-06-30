@@ -1,0 +1,1096 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+<title>Borrovnicca inc.</title>
+<link rel="icon" type="image/x-icon" href="./root/ico.ico">
+<meta content="Borrovnicca" property="og:title">
+<meta content="providing premium pastes since 2022" property="og:description">
+<meta content="https://borrovnicca.github.io/Borrovnicca/" property="og:url">
+<meta content="#ffffff" data-react-helmet="true" name="theme-color">
+<script src="./root/core.js.download"></script>
+
+
+<style id="geherator-ui-style">
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=400;600;700;900&family=Rajdhani:wght=500;600;700&family=Roboto:wght@500;700;900&display=swap');
+
+    :root {
+        --bg-main: #0a0a0a;
+        --bg-app: #111111;
+        --bg-terminal: #161616;
+        --neon-red: #cc2936;
+        --neon-green: #10b981;
+        --neon-gold: #ffb703;
+        --text-color: #ffffff;
+        --text-muted: #a3a3a3;
+    }
+
+    body {
+        background-color: var(--bg-main);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Rajdhani', sans-serif;
+        color: var(--text-color);
+        user-select: none;
+    }
+
+    /* STEP 1: INITIAL SECURITY DOOR */
+    #authOverlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: #090909;
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .auth-panel {
+        background: #121212;
+        border: 1px solid #262626;
+        padding: 30px;
+        border-radius: 8px;
+        width: 320px;
+        text-align: center;
+    }
+
+    .auth-panel h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 15px;
+        color: #fff;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    /* STEP 2: MAIN DOCK CONTAINER */
+    .app-container {
+        width: 375px;
+        height: 780px;
+        background: var(--bg-app);
+        border: 4px solid #262626;
+        border-radius: 24px;
+        padding: 20px;
+        box-sizing: border-box;
+        position: relative;
+        display: none;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    /* APP TOP HEADER */
+    .app-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    .header-left { display: flex; align-items: center; }
+    .app-logo { width: 69px; height: auto; margin-right: 0; object-fit: contain; }
+    .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+    .tg-link-icon { width: 26px; height: 26px; cursor: pointer; transition: transform 0.2s; }
+    .tg-link-icon:hover { transform: scale(1.1); }
+
+    /* TERMINAL SCREEN */
+    .terminal-screen {
+        height: 260px;
+        background: var(--bg-terminal);
+        border-radius: 6px;
+        padding: 12px;
+        font-family: monospace;
+        font-size: 11px;
+        color: var(--text-muted);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: 15px;
+        border: 1px solid #1f1f1f;
+    }
+
+    /* BUTTONS STYLE */
+    .control-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .btn-action {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .btn-stop { background: #b91c1c; color: #ffffff; }
+    .btn-start { background: #ffffff; color: #0d9488; }
+
+    /* ANALYTICS BAR */
+    .analytics-status-bar {
+        background: #1a1a1a;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    /* SUCCESS BANNER (CLICKABLE) */
+    .hit-display-panel {
+        background: #064e3b;
+        border-radius: 6px;
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 700;
+        color: #10b981;
+        border: 1px solid #047857;
+        margin-bottom: 15px;
+        cursor: pointer;
+        visibility: hidden;
+        animation: pulseGlow 1.5s infinite;
+    }
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 0 5px rgba(16,185,129,0.2); }
+        50% { box-shadow: 0 0 15px rgba(16,185,129,0.5); }
+        100% { box-shadow: 0 0 5px rgba(16,185,129,0.2); }
+    }
+
+    .hit-display-panel .crypto-meta { display: flex; align-items: center; gap: 10px; color: #fff; }
+    .hit-display-panel img { width: 22px; height: 22px; }
+
+    /* BOTTOM CONTROLLERS */
+    .utility-controllers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-util {
+        background: #1e1e1e; border: 1px solid #333; color: #fff; padding: 10px;
+        border-radius: 6px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer;
+    }
+    .btn-booster { grid-column: span 2; background: rgba(255, 183, 3, 0.1); border: 1px solid var(--neon-gold); color: var(--neon-gold); margin-top: 5px; font-weight: 700; }
+
+    .footer-stamp { position: absolute; bottom: 15px; left: 0; width: 100%; text-align: center; font-size: 12px; color: #404040; }
+
+    /* MODAL POPUPS COMPONENT */
+    .panel-overlay-modal {
+        display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(10, 10, 10, 0.98); border-radius: 20px; padding: 25px; box-sizing: border-box; z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .modal-headline { font-family: 'Orbitron', sans-serif; font-size: 14px; color: #fff; border-bottom: 1px solid #262626; padding-bottom: 10px; margin-bottom: 15px; }
+    label { font-size: 11px; color: #737373; display: block; margin-bottom: 4px; text-transform: uppercase; font-weight: 600; text-align: left;}
+    input, select { background: #161616; border: 1px solid #262626; color: #fff; padding: 10px; width: 100%; box-sizing: border-box; border-radius: 4px; margin-bottom: 12px; font-family: inherit; }
+
+    .alert-log-box { font-size: 12px; padding: 10px; border-radius: 4px; margin-top: 10px; display: none; font-weight: bold; text-align: center; line-height: 16px; }
+    .log-ok { background: rgba(16,185,129,0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
+    .log-fail { background: rgba(204,41,54,0.1); border: 1px solid var(--neon-red); color: var(--neon-red); }
+
+    /* RESULTS TABLE ARCHIVE */
+    .results-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+    .results-table th { background: #1f1f1f; color: #fff; padding: 8px; text-align: left; font-family: 'Orbitron'; font-size: 10px; }
+    .results-table td { padding: 8px; border-bottom: 1px solid #262626; font-family: monospace; }
+
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+body > canvas {
+    position: fixed !important;
+    inset: 0;
+    z-index: 0;
+    display: block;
+}
+
+#generatorRoot {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+#generatorRoot #authOverlay {
+    background: transparent;
+    pointer-events: auto;
+}
+
+#generatorRoot #mainApp {
+    pointer-events: auto;
+}
+
+#speedBoosterFX {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: none;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.76);
+    pointer-events: auto;
+}
+
+#speedBoosterFX.is-visible {
+    display: block;
+}
+
+.booster-payment-toast {
+    position: fixed;
+    top: 22px;
+    right: 22px;
+    z-index: 4002;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: min(420px, calc(100vw - 44px));
+    padding: 12px 14px 12px 18px;
+    border: 1px solid rgba(74, 222, 128, 0.8);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(3, 83, 47, 0.98), rgba(14, 159, 91, 0.9));
+    box-shadow: 0 0 18px rgba(34, 197, 94, 0.75), 0 0 48px rgba(16, 185, 129, 0.35);
+    color: #ecfdf5;
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: 900;
+    text-transform: lowercase;
+    transform-origin: top right;
+    animation: boosterToastPulse 420ms ease-in-out infinite;
+}
+
+.booster-payment-toast img {
+    width: 125px;
+    max-width: 34vw;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+#boosterCancelBtn {
+    position: fixed;
+    left: 50vw;
+    top: 50vh;
+    z-index: 4003;
+    transform: translate(-50%, -50%);
+    min-width: 156px;
+    padding: 17px 30px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    background: #dc2626;
+    box-shadow: 0 0 22px rgba(220, 38, 38, 0.8), 0 10px 30px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    transition: left 70ms linear, top 70ms linear, transform 70ms linear;
+    will-change: left, top, transform;
+}
+
+#speedBoosterFX.laser-mode #boosterCancelBtn {
+    display: none;
+}
+
+.booster-laser-field {
+    position: absolute;
+    inset: 0;
+    display: none;
+    pointer-events: none;
+}
+
+#speedBoosterFX.laser-mode .booster-laser-field {
+    display: block;
+}
+
+.booster-laser-field::before,
+.booster-laser-field::after {
+    content: "";
+    position: absolute;
+    top: -8vh;
+    width: 34px;
+    height: 116vh;
+    background:
+        linear-gradient(180deg, transparent, rgba(34, 197, 94, 0.85), transparent),
+        radial-gradient(circle, rgba(255, 255, 255, 0.75), transparent 58%);
+    box-shadow: 0 0 26px rgba(34, 197, 94, 0.85), 0 0 54px rgba(239, 68, 68, 0.5);
+    filter: blur(1px);
+    opacity: 0.72;
+    animation: boosterEmitterPulse 180ms ease-in-out infinite;
+}
+
+.booster-laser-field::before {
+    left: -5px;
+}
+
+.booster-laser-field::after {
+    right: -5px;
+}
+
+.booster-laser {
+    position: absolute;
+    width: var(--laser-width, 72vw);
+    height: var(--laser-size, 8px);
+    border-radius: 999px;
+    opacity: 0;
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.35) 15%, rgba(255, 255, 255, 0.98) 45%, rgba(239, 68, 68, 0.92) 60%, transparent 100%),
+        linear-gradient(90deg, transparent, rgba(125, 249, 255, 0.62), transparent);
+    box-shadow:
+        0 0 8px rgba(255, 255, 255, 1),
+        0 0 22px rgba(34, 197, 94, 0.9),
+        0 0 48px rgba(239, 68, 68, 0.78),
+        0 0 76px rgba(125, 249, 255, 0.48);
+    filter: saturate(1.7) brightness(1.35);
+    animation-duration: var(--laser-speed, 360ms);
+    animation-timing-function: cubic-bezier(0.08, 0, 0.92, 1);
+    animation-iteration-count: infinite;
+}
+
+.booster-laser::before,
+.booster-laser::after {
+    content: "";
+    position: absolute;
+    inset: -16px 2%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.5), rgba(255, 255, 255, 0.88), rgba(239, 68, 68, 0.5), transparent);
+    filter: blur(12px);
+    opacity: 0.72;
+}
+
+.booster-laser::after {
+    inset: 35% 8%;
+    background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    filter: blur(0);
+    opacity: 0.95;
+}
+
+.booster-laser.left {
+    left: -52vw;
+    animation-name: boosterLaserLeft;
+}
+
+.booster-laser.right {
+    right: -52vw;
+    animation-name: boosterLaserRight;
+}
+
+@keyframes boosterLaserLeft {
+    0% { transform: translateX(0) rotate(var(--laser-angle)) scaleX(0.75); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateX(190vw) rotate(var(--laser-angle)) scaleX(1.1); opacity: 0; }
+}
+
+@keyframes boosterLaserRight {
+    0% { transform: translateX(0) rotate(var(--laser-angle)) scaleX(0.75); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateX(-190vw) rotate(var(--laser-angle)) scaleX(1.1); opacity: 0; }
+}
+
+@keyframes boosterToastPulse {
+    0%, 100% {
+        transform: scale(1);
+        border-color: rgba(74, 222, 128, 0.8);
+        box-shadow: 0 0 16px rgba(34, 197, 94, 0.74), 0 0 42px rgba(16, 185, 129, 0.35);
+        filter: brightness(1);
+    }
+    45% {
+        transform: scale(1.045);
+        border-color: rgba(187, 247, 208, 1);
+        box-shadow: 0 0 28px rgba(74, 222, 128, 1), 0 0 76px rgba(16, 185, 129, 0.82), 0 0 112px rgba(34, 197, 94, 0.45);
+        filter: brightness(1.22);
+    }
+}
+
+@keyframes boosterEmitterPulse {
+    0%, 100% { opacity: 0.42; transform: scaleX(0.85); }
+    50% { opacity: 0.95; transform: scaleX(1.3); }
+}
+
+#fbiPulseOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 4500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.68);
+    pointer-events: none;
+}
+
+#fbiPulseOverlay.is-visible {
+    display: flex;
+}
+
+#fbiPulseOverlay img {
+    width: min(520px, 82vw);
+    max-height: 82vh;
+    object-fit: contain;
+    border-radius: 10px;
+    filter: drop-shadow(0 0 22px rgba(59, 130, 246, 0.9)) drop-shadow(0 0 42px rgba(239, 68, 68, 0.78));
+    animation: fbiPulse 360ms ease-in-out infinite;
+}
+
+@keyframes fbiPulse {
+    0%, 100% {
+        transform: scale(0.96);
+        opacity: 0.86;
+        filter: drop-shadow(0 0 14px rgba(59, 130, 246, 0.8)) drop-shadow(0 0 26px rgba(239, 68, 68, 0.66));
+    }
+    50% {
+        transform: scale(1.08);
+        opacity: 1;
+        filter: drop-shadow(0 0 30px rgba(59, 130, 246, 1)) drop-shadow(0 0 58px rgba(239, 68, 68, 0.95));
+    }
+}
+
+body.booster-screen-shake > canvas,
+body.booster-screen-shake #main,
+body.booster-screen-shake #generatorRoot,
+body.booster-screen-shake #speedBoosterFX {
+    animation: boosterScreenShake 90ms linear infinite;
+}
+
+@keyframes boosterScreenShake {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(2px, -1px); }
+    50% { transform: translate(-1px, 2px); }
+    75% { transform: translate(1px, 1px); }
+    100% { transform: translate(-2px, -1px); }
+}
+</style>
+</head><body><audio id="music" src="msc.mp3" autoplay="" loop="" onplaying="" style="display: none;"></audio>
+<script>
+	var audio = document.getElementById("music");
+	audio.volume = 0.1;
+</script>
+	
+		<canvas width="1536" height="731" style="width: 1536px; height: 731px;"></canvas>
+<script>
+  p = [
+	[389,246,0],
+  [410,255,20],
+  [413,268,7],
+  [431,261,12],
+  [418,244,30],
+  [416,217,25],
+  [420,205,8],
+  [427,227,-20],
+  [432,236,5],
+  [444,228,12],
+  [451,232,41],
+  [446,246,72],
+  [443,264,96],
+  [446,278,65],
+  [463,267,20],
+  [460,258,-10],
+  [464,243,-20],
+  [459,233,0],
+  [475,225,22],
+  [484,225,29],
+  [490,214,51],
+  [476,202,55],
+  [462,202,55],
+  [446,205,42],
+  [440,192,42],
+  [430,183,72],
+  [413,184,58],
+  [406,191,32],
+  [406,207,0],
+  [402,220,0],
+  [390,222,20],
+  [385,228,10],
+  [389,246,0]
+];
+</script>
+
+  <script src="./root/three.min.js.download"></script><script src="./root/script.js.download"></script>
+
+<script id="void-speed-lock">
+    cameraSpeed = .00018;
+    lightSpeed = .0006;
+</script>
+	
+        <link rel="stylesheet" href="./root/all.css">
+        <link rel="stylesheet" href="./root/style.css">
+        <link rel="stylesheet" href="./root/animate.css">
+	<link rel="stylesheet" href="./root/stylerainbow.css">
+
+    <div id="main" class="center">
+        <div id="overlay" onclick="music.play(); addStuff();"></div>
+    </div>
+
+    <script>
+        function handleAnimations() {
+            let animations = [
+                ["rotateInDownLeft", "rotateInDownRight"]
+            ];
+
+            var num = getRandomInt(animations.length);
+
+            animateCSS('[name="top"]', animations[num][0], animationOver);
+            animateCSS('[name="bottom"]', animations[num][1], animationOver);
+            console.log("top: " + animations[num][0]);
+            console.log("bottom: " + animations[num][1]);
+        }
+
+        function addStuff() {
+            at("main").innerHTML =
+                `<h1 name="top"    id = "status_text" class="header animated"><a href="https://borrovnicca.github.io/Borrovnicca/">borrovnicca</a></h1>
+            <p  name="bottom" id = "text2" class="textiboi animated">providing premium pastes since 2022</p>`;
+
+            handleAnimations();
+        }
+
+        function animateCSS(element, animationName, callback) {
+            const node = document.querySelector(element)
+            node.classList.add('animated', animationName)
+            node.classList.add('delay-2s')
+
+            function handleAnimationEnd() {
+                node.classList.remove('animated', animationName)
+                node.removeEventListener('animationend', handleAnimationEnd)
+
+                if (typeof callback === 'function') callback()
+            }
+
+            node.addEventListener('animationend', handleAnimationEnd)
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+        var at = document.getElementById.bind(document);
+        window.addEventListener("DOMContentLoaded", () => {
+            at("status_text").innerHTML = "loading";
+
+        });
+
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                if (!window.music.paused) {
+                    addStuff();
+                    console.log("music already started");
+                    return;
+                }
+                at("status_text").innerHTML = "click to enter";
+                at("status_text").classList.add("begin");
+
+            }, 100);
+        });
+
+        var temp = 0
+
+        function animationOver() {
+            temp++;
+
+            if (temp != 2)
+                return;
+
+            setTimeout(function() {
+                console.log("animations over");
+                var doc = document.getElementById("main");
+                var inner = doc.innerHTML;
+
+                doc.innerHTML +=
+                    `<div class="textiboi">
+                <a id="typElement"></a></div>
+                <div class="textiboi"><br/>
+				<a class="textiboi animated fadeIn"  href="https://borrovnicca.github.io/Borrovnicca/forums">forums</a>
+				<a class="textiboi animated fadeIn"  href="https://borrovnicca.github.io/Borrovnicca/showcase">showcase</a>
+				<a class="textiboi animated fadeIn"  href="https://discord.gg/xRUeN7Zwqz">discord</a>`;
+                console.log("running typewrite");
+
+            }, 550);
+
+        }
+
+        function indefiniteWrite() {
+            let strs = [
+                "providing premium pastes since 2022",
+            ];
+
+            var num = getRandomInt(strs.length);
+
+            console.log("writing " + strs[num]);
+
+            var typElement = document.getElementById('typElement');
+
+            var typewriter = new Typewriter(typElement, {
+                loop: true
+            });
+
+            typewriter.typeString(strs[num]).pauseFor(5000).deleteAll().pauseFor(100).callFunction(() => {
+                typewriter.stop();
+                indefiniteWrite();
+            }).start();
+        }
+    </script>
+
+
+
+
+
+<div id="generatorRoot">
+<div id="authOverlay">
+    <div class="auth-panel">
+        <h2>Borrovnicca inc.</h2>
+        <input type="text" id="appAccessKey" placeholder="ENTER USERNAME...">
+        <button onclick="validateAccess()" class="btn-action btn-start" style="width:100%; margin-top:5px;">UNLOCK</button>
+    </div>
+</div>
+
+<div class="app-container" id="mainApp">
+    
+    <div class="app-header">
+        <div class="header-left">
+            <img class="app-logo" src="https://borrovnicca.carrd.co/assets/images/image01.png?v=a30f035e" alt="borrovnica">
+        </div>
+		<div class="app-title">Borrovnicca inc.</div>
+        <a href="https://borrovnicca.github.io/Borrovnicca1/" target="_blank">
+            <img class="tg-link-icon" src="https://borrovnicca.carrd.co/assets/images/favicon.png?v=a30f035e" alt="borrovnicca.carrd.co">
+        </a>
+    </div>
+
+    <div class="terminal-screen" id="logTerminal">
+        <div>*seed-phrase: awaiting core node boot sequence initialization...</div>
+    </div>
+
+    <div class="control-row">
+        <button id="stopBtn" class="btn-action btn-stop" onclick="stopSearch()">STOP</button>
+        <button id="startBtn" class="btn-action btn-start" onclick="startSearch()">START</button>
+    </div>
+
+    <div class="analytics-status-bar">
+        Attempts: <span id="attemptsCount">0</span> [Found: <span id="foundCount">0</span>] ≈ <span id="estValue">0</span>$
+    </div>
+
+    <div class="hit-display-panel" id="hitPanel" onclick="openArchiveModal()" title="Click to view all found wallets table">
+        <div class="crypto-meta">
+            <img id="hitIcon" src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="Coin">
+            <span id="hitCryptoText">0 USDT ≈ 0.0$</span>
+        </div>
+        <div id="networkBadge" style="font-size: 11px; color: #6ee7b7; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius:3px;">(BEP20)</div>
+    </div>
+
+    <div class="utility-controllers">
+        <button class="btn-util" onclick="playStojanSound()">💰 Isplati</button>
+        <button class="btn-util" onclick="connectWalletAlert()">🌐 Dodaj $UTC</button>
+        <button class="btn-util btn-booster" onclick="activateSpeedBooster()">🚀 Speed Booster (Active 10x)</button>
+    </div>
+
+    <div class="footer-stamp">Free for personal use<br>©2025 Borrovnicca branding<br>All rights reserved</div>
+
+    <div id="archiveModal" class="panel-overlay-modal">
+        <h3 class="modal-headline">EXTRACTED WALLETS DATABASE</h3>
+        <div style="font-size:11px; color: var(--text-muted); margin-bottom: 10px;">Below is the registry record compiled during this session active run:</div>
+        
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>Network</th>
+                    <th>Balance Value</th>
+                </tr>
+            </thead>
+            <tbody id="tableArchiveBody">
+                </tbody>
+        </table>
+
+        <button onclick="closeArchiveModal()" class="btn-action btn-stop" style="width:100%; padding:10px; margin-top:20px; font-size:12px;">CLOSE DATABASE</button>
+    </div>
+
+    <div id="withdrawModal" class="panel-overlay-modal">
+        <h3 class="modal-headline">SECURE WITHDRAWAL PROTOCOL</h3>
+        
+        <label>Select Crypto Chain Network</label>
+        <select id="wCurrency">
+            <option value="USDT">Tether (USDT - BEP20)</option>
+            <option value="BTC">Bitcoin (BTC)</option>
+            <option value="ETH">Ethereum (ETH - ERC20)</option>
+            <option value="LTC">Litecoin (LTC)</option>
+            <option value="SOL">Solana (SOL)</option>
+        </select>
+
+        <label>Destination Wallet Address</label>
+        <input type="text" id="wAddress" placeholder="Enter corresponding destination address...">
+
+        <label>Total Amount to Withdraw ($)</label>
+        <input type="number" id="wAmount" placeholder="Enter payout conversion value in USD...">
+
+        <label>Private Verification License Key</label>
+        <input type="password" id="withdrawKey" placeholder="Enter private authorization key...">
+
+        <button onclick="processWithdraw()" class="btn-action btn-start" style="width:100%; padding:12px; margin-bottom: 8px;">CONFIRM DISBURSEMENT</button>
+        <button onclick="closeWithdraw()" class="btn-action btn-stop" style="width:100%; padding:8px; font-size:11px;">CANCEL</button>
+    
+        <div id="withdrawResponse" class="alert-log-box"></div>
+    </div>
+
+    <div id="adminModal" class="panel-overlay-modal">
+        <h3 class="modal-headline" style="color: var(--neon-gold);">🔧 ADMIN MANAGEMENT TERMINAL</h3>
+        
+        <label>Target Injection Currency</label>
+        <select id="admCoin">
+            <option value="USDT">USDT</option>
+            <option value="BTC">BTC</option>
+            <option value="ETH">ETH</option>
+            <option value="LTC">LTC</option>
+            <option value="SOL">SOL</option>
+        </select>
+
+        <label>Chain Network Structure Label</label>
+        <input type="text" id="admNet" value="(BEP20)">
+
+        <label>Exact USD Equivalent Amount ($)</label>
+        <input type="number" id="admAmount" placeholder="Example: 500">
+
+        <button onclick="injectAdminResult()" class="btn-action btn-start" style="width:100%; padding:12px; background: var(--neon-gold); color: #000; margin-bottom: 8px;">INJECT CUSTOM RESULT</button>
+        <button onclick="closeAdminPanel()" class="btn-action btn-stop" style="width:100%; padding:8px; font-size:11px;">EXIT ADMIN MODE</button>
+    </div>
+</div>
+</div>
+
+<div id="speedBoosterFX" aria-hidden="true">
+    <div class="booster-payment-toast">
+        <span>platio si 1000 dinara</span>
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/96/1000RSD_note_obverse.jpg/250px-1000RSD_note_obverse.jpg" alt="1000 srpskih dinara">
+    </div>
+    <button id="boosterCancelBtn" type="button">odustani</button>
+    <div class="booster-laser-field" aria-hidden="true">
+        <div class="booster-laser left" style="top: 7%; --laser-angle: 14deg; --laser-size: 9px; --laser-width: 82vw; --laser-speed: 310ms; animation-delay: 0ms;"></div>
+        <div class="booster-laser right" style="top: 12%; --laser-angle: -13deg; --laser-size: 6px; --laser-width: 70vw; --laser-speed: 285ms; animation-delay: 45ms;"></div>
+        <div class="booster-laser left" style="top: 18%; --laser-angle: -8deg; --laser-size: 12px; --laser-width: 92vw; --laser-speed: 340ms; animation-delay: 90ms;"></div>
+        <div class="booster-laser right" style="top: 24%; --laser-angle: 10deg; --laser-size: 7px; --laser-width: 74vw; --laser-speed: 300ms; animation-delay: 130ms;"></div>
+        <div class="booster-laser left" style="top: 31%; --laser-angle: 5deg; --laser-size: 5px; --laser-width: 68vw; --laser-speed: 260ms; animation-delay: 170ms;"></div>
+        <div class="booster-laser right" style="top: 36%; --laser-angle: -16deg; --laser-size: 13px; --laser-width: 94vw; --laser-speed: 365ms; animation-delay: 210ms;"></div>
+        <div class="booster-laser left" style="top: 43%; --laser-angle: -12deg; --laser-size: 8px; --laser-width: 86vw; --laser-speed: 295ms; animation-delay: 250ms;"></div>
+        <div class="booster-laser right" style="top: 48%; --laser-angle: 7deg; --laser-size: 10px; --laser-width: 80vw; --laser-speed: 330ms; animation-delay: 295ms;"></div>
+        <div class="booster-laser left" style="top: 55%; --laser-angle: 16deg; --laser-size: 6px; --laser-width: 72vw; --laser-speed: 275ms; animation-delay: 335ms;"></div>
+        <div class="booster-laser right" style="top: 60%; --laser-angle: -5deg; --laser-size: 14px; --laser-width: 96vw; --laser-speed: 350ms; animation-delay: 380ms;"></div>
+        <div class="booster-laser left" style="top: 67%; --laser-angle: -6deg; --laser-size: 9px; --laser-width: 78vw; --laser-speed: 315ms; animation-delay: 420ms;"></div>
+        <div class="booster-laser right" style="top: 72%; --laser-angle: 14deg; --laser-size: 5px; --laser-width: 66vw; --laser-speed: 255ms; animation-delay: 465ms;"></div>
+        <div class="booster-laser left" style="top: 79%; --laser-angle: 9deg; --laser-size: 12px; --laser-width: 90vw; --laser-speed: 345ms; animation-delay: 505ms;"></div>
+        <div class="booster-laser right" style="top: 84%; --laser-angle: -11deg; --laser-size: 8px; --laser-width: 84vw; --laser-speed: 305ms; animation-delay: 550ms;"></div>
+        <div class="booster-laser left" style="top: 91%; --laser-angle: -15deg; --laser-size: 7px; --laser-width: 76vw; --laser-speed: 290ms; animation-delay: 590ms;"></div>
+        <div class="booster-laser right" style="top: 96%; --laser-angle: 6deg; --laser-size: 11px; --laser-width: 88vw; --laser-speed: 335ms; animation-delay: 635ms;"></div>
+    </div>
+</div>
+<audio id="moveItAudio" src="./root/moveit.mp3" preload="auto"></audio>
+
+<div id="fbiPulseOverlay" aria-hidden="true">
+    <img src="./root/fbi.gif" alt="FBI">
+</div>
+
+<script id="geherator-ui-script">
+let isRunning = false;
+    let timer;
+    let totalAttempts = 0;
+    let foundCount = 0;
+    let totalUSD = 0;
+    let engineSpeed = 1000;
+    
+    let loopTicks = 0;
+    let targetTickForNextFind = 300;
+    let boosterFirstMoveTimer;
+    let boosterMoveTimer;
+    let boosterPhaseTimer;
+    let boosterFinishTimer;
+    let fbiPulseTimer;
+
+    let foundWalletsRecords = [];
+
+    const cryptos = [
+        { code: "USDT", net: "(BEP20)", icon: "https://cryptologos.cc/logos/tether-usdt-logo.png", rate: 1 },
+        { code: "BTC", net: "(Native)", icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png", rate: 65000 },
+        { code: "ETH", net: "(ERC20)", icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png", rate: 3500 },
+        { code: "LTC", net: "(Native)", icon: "https://cryptologos.cc/logos/litecoin-ltc-logo.png", rate: 80 },
+        { code: "SOL", net: "(SPL)", icon: "https://cryptologos.cc/logos/solana-sol-logo.png", rate: 140 }
+    ];
+
+    const dictionary = ["cluster", "security", "cabbage", "person", "brave", "retreat", "trade", "common", "chief", "laundry", "awesome", "hill", "solid", "wolf", "host", "verify", "penalty", "erode", "situate", "neutral", "army", "chimney", "almost", "exact", "pen", "west", "promote", "south", "hamster", "patient", "resist", "patch", "quiz", "toilet", "figure", "student", "lady", "tray", "melody", "pave", "fish", "icon", "faith", "tag", "random", "blouse", "phone", "want", "fee", "match", "fork", "boss", "lawsuit", "ivory", "sustain", "pair", "ecology", "critic", "december", "bag", "box", "front", "antenna", "input", "mandate", "bread", "chalk", "reason", "liberty", "author", "sight", "erupt", "cinnamon", "salt", "frost", "father", "insect", "lamp", "rain", "mystery", "cliff", "mixture", "anchor", "jar", "waste", "cover", "lava", "acoustic", "analyst", "real", "super", "edge", "doll", "myself", "eagle", "iron", "all", "guilt", "anxiety", "fiber", "fade", "aim", "invest", "someone", "puppy", "oval", "science", "maximum", "deer", "square", "upset", "reopen", "index", "scale"];
+    
+    const userKeys = ["USER1", "USER2", "USER3"];
+    const adminKey = "ADMIN123";
+    const payoutKeys = ["WITHDRAW1", "WITHDRAW2"];
+
+    function validateAccess() {
+        const input = document.getElementById('appAccessKey').value.trim();
+        if (!input) {
+            alert("PLEASE ENTER USERNAME.");
+            return;
+        }
+
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+
+        if (input === adminKey) {
+            document.getElementById('adminModal').style.display = 'block';
+        }
+    }
+
+    function startSearch() {
+        if(isRunning) return;
+        isRunning = true;
+        loopEngine();
+    }
+
+    function stopSearch() {
+        isRunning = false;
+        clearTimeout(timer);
+    }
+
+    function loopEngine() {
+        if(!isRunning) return;
+        
+        loopTicks++;
+        totalAttempts += Math.floor(Math.random() * 4) + 1;
+        document.getElementById('attemptsCount').innerText = totalAttempts;
+
+        const terminal = document.getElementById('logTerminal');
+        
+        let words = [];
+        for(let i=0; i<6; i++) { words.push(dictionary[Math.floor(Math.random() * dictionary.length)]); }
+        const phraseLine = `*seed-phrase: ${words.join(" ")}...`;
+        
+        const div = document.createElement('div');
+        div.innerText = phraseLine;
+        terminal.appendChild(div);
+        
+        if(terminal.childNodes.length > 15) { terminal.removeChild(terminal.firstChild); }
+        terminal.scrollTop = terminal.scrollHeight;
+
+        if(loopTicks >= targetTickForNextFind && foundCount < 3) {
+            loopTicks = 0;
+            targetTickForNextFind = Math.floor(Math.random() * 600) + 500; 
+
+            let winAmountUSD = Math.floor(Math.random() * (1000 - 10 + 1)) + 10;
+            let coin = cryptos[Math.floor(Math.random() * cryptos.length)];
+            
+            registerNewFoundRecord(coin, winAmountUSD, coin.net);
+        }
+
+        timer = setTimeout(loopEngine, engineSpeed);
+    }
+
+    function registerNewFoundRecord(coinObj, usdValue, networkLabel) {
+        foundCount++;
+        let coinAmount = (usdValue / coinObj.rate).toFixed(4);
+        totalUSD += usdValue;
+
+        document.getElementById('foundCount').innerText = foundCount;
+        document.getElementById('estValue').innerText = totalUSD;
+
+        const panel = document.getElementById('hitPanel');
+        panel.style.visibility = 'visible';
+        document.getElementById('hitIcon').src = coinObj.icon;
+        document.getElementById('hitCryptoText').innerText = `${coinAmount} ${coinObj.code} ≈ ${usdValue}.0$`;
+        document.getElementById('networkBadge').innerText = networkLabel;
+
+        foundWalletsRecords.push({
+            icon: coinObj.icon,
+            code: coinObj.code,
+            amount: coinAmount,
+            usd: usdValue,
+            net: networkLabel
+        });
+
+        rebuildTableDOM();
+    }
+
+    function rebuildTableDOM() {
+        const tbody = document.getElementById('tableArchiveBody');
+        tbody.innerHTML = "";
+        
+        foundWalletsRecords.forEach(record => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <img src="${record.icon}" style="width:16px; height:16px;">
+                        <strong>${record.code}</strong>
+                    </div>
+                </td>
+                <td style="color:#6ee7b7;">${record.net}</td>
+                <td style="color:var(--neon-green); font-weight:bold;">${record.amount} (~${record.usd}$)</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function injectAdminResult() {
+        const coinCode = document.getElementById('admCoin').value;
+        const netLabel = document.getElementById('admNet').value.trim();
+        const usdVal = parseInt(document.getElementById('admAmount').value);
+
+        if(!usdVal || usdVal <= 0) {
+            alert("Please input a valid injection amount parameter scale.");
+            return;
+        }
+
+        const standardCoinObj = cryptos.find(c => c.code === coinCode);
+        
+        registerNewFoundRecord(standardCoinObj, usdVal, netLabel);
+        alert(`Successfully injected custom ${usdVal}$ ${coinCode} node block asset into live app layout registry!`);
+        closeAdminPanel();
+    }
+
+    function openArchiveModal() { document.getElementById('archiveModal').style.display = 'block'; }
+    function closeArchiveModal() { document.getElementById('archiveModal').style.display = 'none'; }
+    function openWithdrawModal() { playStojanSound(); }
+    function closeAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
+    function connectWalletAlert() {
+        const fbiOverlay = document.getElementById('fbiPulseOverlay');
+        if (!fbiOverlay) return;
+
+        clearTimeout(fbiPulseTimer);
+        fbiOverlay.classList.add('is-visible');
+        fbiOverlay.setAttribute('aria-hidden', 'false');
+
+        fbiPulseTimer = setTimeout(() => {
+            fbiOverlay.classList.remove('is-visible');
+            fbiOverlay.setAttribute('aria-hidden', 'true');
+        }, 5000);
+    }
+    function playStojanSound() {
+        const audio = new Audio('./root/stojan.mp3');
+        audio.play();
+    }
+
+    function resetSpeedBoosterFX() {
+        clearTimeout(boosterFirstMoveTimer);
+        clearInterval(boosterMoveTimer);
+        clearTimeout(boosterPhaseTimer);
+        clearTimeout(boosterFinishTimer);
+
+        const fxLayer = document.getElementById('speedBoosterFX');
+        if (fxLayer) {
+            fxLayer.classList.remove('is-visible', 'laser-mode');
+            fxLayer.setAttribute('aria-hidden', 'true');
+        }
+
+        document.body.classList.remove('booster-screen-shake');
+
+        const moveItAudio = document.getElementById('moveItAudio');
+        if (moveItAudio) {
+            moveItAudio.onended = null;
+            moveItAudio.pause();
+            moveItAudio.currentTime = 0;
+        }
+    }
+
+    function moveBoosterCancelButton(event) {
+        if (event) {
+            event.preventDefault();
+        }
+
+        const button = document.getElementById('boosterCancelBtn');
+        if (!button) return;
+
+        const padX = Math.min(120, Math.max(40, window.innerWidth * 0.08));
+        const padY = Math.min(120, Math.max(40, window.innerHeight * 0.08));
+        const minX = padX + (button.offsetWidth / 2);
+        const minY = padY + (button.offsetHeight / 2);
+        const maxX = Math.max(minX, window.innerWidth - padX - (button.offsetWidth / 2));
+        const maxY = Math.max(minY, window.innerHeight - padY - (button.offsetHeight / 2));
+        const x = minX + Math.random() * Math.max(1, maxX - minX);
+        const y = minY + Math.random() * Math.max(1, maxY - minY);
+        const rotate = Math.floor(Math.random() * 28) - 14;
+
+        button.style.left = `${x}px`;
+        button.style.top = `${y}px`;
+        button.style.transform = `translate(-50%, -50%) rotate(${rotate}deg)`;
+    }
+
+    function startSpeedBoosterFX() {
+        resetSpeedBoosterFX();
+
+        const fxLayer = document.getElementById('speedBoosterFX');
+        const button = document.getElementById('boosterCancelBtn');
+        const moveItAudio = document.getElementById('moveItAudio');
+        if (!fxLayer || !button || !moveItAudio) return;
+
+        fxLayer.classList.add('is-visible');
+        fxLayer.setAttribute('aria-hidden', 'false');
+
+        button.style.display = 'block';
+        button.style.left = '50vw';
+        button.style.top = '50vh';
+        button.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+        button.onmouseenter = moveBoosterCancelButton;
+        button.onmousemove = moveBoosterCancelButton;
+        button.onpointerdown = moveBoosterCancelButton;
+        button.onclick = moveBoosterCancelButton;
+
+        moveItAudio.volume = 1;
+        moveItAudio.currentTime = 0;
+        moveItAudio.onended = resetSpeedBoosterFX;
+        moveItAudio.play().catch(() => {});
+
+        boosterFirstMoveTimer = setTimeout(() => {
+            moveBoosterCancelButton();
+            boosterMoveTimer = setInterval(moveBoosterCancelButton, 115);
+        }, 350);
+
+        boosterPhaseTimer = setTimeout(() => {
+            clearTimeout(boosterFirstMoveTimer);
+            clearInterval(boosterMoveTimer);
+            button.style.display = 'none';
+            fxLayer.classList.add('laser-mode');
+            document.body.classList.add('booster-screen-shake');
+        }, 15000);
+
+        boosterFinishTimer = setTimeout(resetSpeedBoosterFX, 51000);
+    }
+    
+    function activateSpeedBooster() { 
+        engineSpeed = 40; 
+        targetTickForNextFind = targetTickForNextFind / 3;
+        startSpeedBoosterFX();
+    }
+
+    function closeWithdraw() {
+        document.getElementById('withdrawModal').style.display = 'none';
+        document.getElementById('withdrawResponse').style.display = 'none';
+    }
+
+    function processWithdraw() {
+        const addr = document.getElementById('wAddress').value.trim();
+        const amt = document.getElementById('wAmount').value;
+        const key = document.getElementById('withdrawKey').value.trim();
+        const box = document.getElementById('withdrawResponse');
+        
+        if(!addr || !amt || !key) {
+            alert("Please fill all required operational entry inputs.");
+            return;
+        }
+
+        box.style.display = 'block';
+        box.className = 'alert-log-box';
+
+        if (payoutKeys.includes(key)) {
+            box.classList.add('log-ok');
+            box.innerText = "Withdrawn was successfully done, waiting for blockchain confirmation";
+        } else {
+            box.classList.add('log-fail');
+            box.innerText = "Purchase key from app owner @software_owner11";
+            setTimeout(() => {
+                window.location.href = "https://t.me/software_owner11";
+            }, 2000);
+        }
+    }
+</script>
+</body></html>
